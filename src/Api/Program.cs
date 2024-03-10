@@ -7,15 +7,6 @@ builder.Host.UseSerilog((hostBuilderContext, services, loggerConfiguration) =>
     loggerConfiguration.AddApplicationInsightsLogging(services, hostBuilderContext.Configuration);
 });
 
-// setup database connection (used for in memory SQLite).
-// SQLite in memory requires an open connection during the application lifetime
-#pragma warning disable S125
-// to use a file based SQLite use: "Filename=../realworld.db";
-#pragma warning restore S125
-const string connectionString = "Filename=:memory:";
-var connection = new SqliteConnection(connectionString);
-connection.Open();
-
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -64,8 +55,9 @@ builder.Services.AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSc
         o.Events = new JwtBearerEvents { OnMessageReceived = CustomOnMessageReceivedHandler.OnMessageReceived };
     });
 
-// for SQLite in memory a connection is provided rather than a connection string
-builder.Services.AddDbContext<ConduitContext>(options => { options.UseSqlite(connection); });
+builder.Services.AddDbContext<ConduitContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ConduitContext"), b => b.MigrationsAssembly("Data")));
+
 ProblemDetailsExtensions.AddProblemDetails(builder.Services);
 builder.Services.ConfigureOptions<ProblemDetailsLogging>();
 
@@ -103,7 +95,6 @@ catch (Exception ex)
 }
 finally
 {
-    connection.Close();
     Log.CloseAndFlush();
     Thread.Sleep(2000);
 }

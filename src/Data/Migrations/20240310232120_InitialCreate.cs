@@ -1,19 +1,22 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Realworlddotnet.Data.Migrations
 {
-    public partial class Initial : Migration
+    /// <inheritdoc />
+    public partial class InitialCreate : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,11 +27,11 @@ namespace Realworlddotnet.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Bio = table.Column<string>(type: "TEXT", nullable: false),
-                    Image = table.Column<string>(type: "TEXT", nullable: false)
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Bio = table.Column<string>(type: "text", nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,14 +42,14 @@ namespace Realworlddotnet.Data.Migrations
                 name: "Articles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Slug = table.Column<string>(type: "TEXT", nullable: false),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Body = table.Column<string>(type: "TEXT", nullable: false),
-                    AuthorUsername = table.Column<string>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Slug = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Body = table.Column<string>(type: "text", nullable: false),
+                    AuthorUsername = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,8 +66,8 @@ namespace Realworlddotnet.Data.Migrations
                 name: "FollowedUsers",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    FollowerUsername = table.Column<string>(type: "TEXT", nullable: false)
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    FollowerUsername = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,8 +90,8 @@ namespace Realworlddotnet.Data.Migrations
                 name: "ArticleFavorites",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,8 +114,8 @@ namespace Realworlddotnet.Data.Migrations
                 name: "ArticleTag",
                 columns: table => new
                 {
-                    ArticlesId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TagsId = table.Column<string>(type: "TEXT", nullable: false)
+                    ArticlesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TagsId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,13 +138,13 @@ namespace Realworlddotnet.Data.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Body = table.Column<string>(type: "TEXT", nullable: false),
-                    Username = table.Column<string>(type: "TEXT", nullable: false),
-                    ArticleId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Body = table.Column<string>(type: "text", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    ArticleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,6 +206,7 @@ namespace Realworlddotnet.Data.Migrations
                 unique: true);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
