@@ -26,7 +26,7 @@ Build using the following features:
 
 - the new WebApplication.CreateBuilder(args)
 - file scoped namespaces
-- Entity Framework Core with SQLite db
+- Entity Framework Core with Postgres db
 - serilog for logging
 - logging integrated with application insights, including realtime monitoring
 - Hellang.Middleware.ProblemDetails for consistent error output
@@ -34,13 +34,13 @@ Build using the following features:
 
 # Getting started
 
-This solution uses an in memory SQLite db. In case you want to use a file based db
-then you can add migrations as indicated below
+This solution uses Postgres.
 
-## migrations
+### Install dotnet-ef.
+`dotnet tool install --global dotnet-ef`
 
-Add migration by going to Data folder and execute:
-dotnet ef migrations add MigrationName --startup-project ../Api/Api.csproj
+### Move to src/Data folder
+`cd src/Data`
 
-Run db upgrade:
-dotnet ef database update --startup-project ../Api/Api.csproj
+### Run db upgrade:
+`dotnet ef database update --startup-project ../Api/Api.csproj`
